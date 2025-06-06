@@ -13,3 +13,101 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String          @unique
+  password       String
+  image          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  themes         Theme[]         @relation("UserThemes")
+  templates      Template[]      @relation("UserTemplates")
+  wordpressSites WordPressSite[] @relation("UserWordPressSites")
+}
+
+model Theme {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  thumbnail   String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  status      String     @default("draft") // draft, published
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String     @db.ObjectId
+  user        User       @relation("UserThemes", fields: [userId], references: [id])
+  templates   Template[] @relation("ThemeTemplates")
+  components  Component[] @relation("ThemeComponents")
+  deployments Deployment[] @relation("ThemeDeployments")
+}
+
+model Template {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  type        String     // page, post, archive, single, etc.
+  htmlContent String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  status      String     @default("draft") // draft, published
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String     @db.ObjectId
+  user        User       @relation("UserTemplates", fields: [userId], references: [id])
+  themeId     String?    @db.ObjectId
+  theme       Theme?     @relation("ThemeTemplates", fields: [themeId], references: [id])
+  components  Component[] @relation("TemplateComponents")
+  deployments Deployment[] @relation("TemplateDeployments")
+}
+
+model Component {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  type        String     // header, footer, sidebar, etc.
+  htmlContent String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  themeId     String?    @db.ObjectId
+  theme       Theme?     @relation("ThemeComponents", fields: [themeId], references: [id])
+  templateId  String?    @db.ObjectId
+  template    Template?  @relation("TemplateComponents", fields: [templateId], references: [id])
+}
+
+model WordPressSite {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  url         String
+  apiUrl      String?
+  username    String?
+  password    String?
+  apiKey      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  userId      String     @db.ObjectId
+  user        User       @relation("UserWordPressSites", fields: [userId], references: [id])
+  deployments Deployment[] @relation("SiteDeployments")
+}
+
+model Deployment {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  status          String        @default("pending") // pending, in-progress, completed, failed
+  deploymentType  String        // theme, template
+  logs            String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  wordpressSiteId String        @db.ObjectId
+  wordpressSite   WordPressSite @relation("SiteDeployments", fields: [wordpressSiteId], references: [id])
+  themeId         String?       @db.ObjectId
+  theme           Theme?        @relation("ThemeDeployments", fields: [themeId], references: [id])
+  templateId      String?       @db.ObjectId
+  template        Template?     @relation("TemplateDeployments", fields: [templateId], references: [id])
+}
