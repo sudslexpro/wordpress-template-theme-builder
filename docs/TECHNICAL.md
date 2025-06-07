@@ -75,7 +75,7 @@ The WordPress Template Theme Builder follows a modern web application architectu
 
 ## Project Structure
 
-```
+```txt
 wordpress-template-theme-builder/
 ├── app/                    # Next.js app directory
 │   ├── api/                # API routes
@@ -254,8 +254,8 @@ Authenticate a user and create a session.
 
 ```json
 {
-	"email": "user@example.com",
-	"password": "password123"
+ "email": "user@example.com",
+ "password": "password123"
 }
 ```
 
@@ -263,13 +263,13 @@ Authenticate a user and create a session.
 
 ```json
 {
-	"user": {
-		"id": "clj2x0f3g0000qw3h5j7z8j9k",
-		"name": "John Doe",
-		"email": "user@example.com",
-		"image": "https://example.com/avatar.jpg"
-	},
-	"expires": "2023-07-01T00:00:00.000Z"
+ "user": {
+  "id": "clj2x0f3g0000qw3h5j7z8j9k",
+  "name": "John Doe",
+  "email": "user@example.com",
+  "image": "https://example.com/avatar.jpg"
+ },
+ "expires": "2023-07-01T00:00:00.000Z"
 }
 ```
 
@@ -290,24 +290,24 @@ Get a list of themes for the authenticated user.
 
 ```json
 {
-	"themes": [
-		{
-			"id": "clj2x0f3g0001qw3h5j7z8j9k",
-			"name": "Modern Blog",
-			"description": "A clean, modern blog theme",
-			"version": "1.0.0",
-			"screenshot": "https://example.com/screenshot.jpg",
-			"status": "published",
-			"createdAt": "2023-06-01T00:00:00.000Z",
-			"updatedAt": "2023-06-01T00:00:00.000Z"
-		}
-	],
-	"pagination": {
-		"total": 10,
-		"page": 1,
-		"limit": 10,
-		"pages": 1
-	}
+ "themes": [
+  {
+   "id": "clj2x0f3g0001qw3h5j7z8j9k",
+   "name": "Modern Blog",
+   "description": "A clean, modern blog theme",
+   "version": "1.0.0",
+   "screenshot": "https://example.com/screenshot.jpg",
+   "status": "published",
+   "createdAt": "2023-06-01T00:00:00.000Z",
+   "updatedAt": "2023-06-01T00:00:00.000Z"
+  }
+ ],
+ "pagination": {
+  "total": 10,
+  "page": 1,
+  "limit": 10,
+  "pages": 1
+ }
 }
 ```
 
@@ -319,13 +319,13 @@ Create a new theme.
 
 ```json
 {
-	"name": "Modern Blog",
-	"description": "A clean, modern blog theme",
-	"version": "1.0.0",
-	"author": "John Doe",
-	"authorUri": "https://example.com",
-	"themeUri": "https://example.com/themes/modern-blog",
-	"tags": "blog, modern, clean"
+ "name": "Modern Blog",
+ "description": "A clean, modern blog theme",
+ "version": "1.0.0",
+ "author": "John Doe",
+ "authorUri": "https://example.com",
+ "themeUri": "https://example.com/themes/modern-blog",
+ "tags": "blog, modern, clean"
 }
 ```
 
@@ -333,17 +333,17 @@ Create a new theme.
 
 ```json
 {
-	"id": "clj2x0f3g0001qw3h5j7z8j9k",
-	"name": "Modern Blog",
-	"description": "A clean, modern blog theme",
-	"version": "1.0.0",
-	"author": "John Doe",
-	"authorUri": "https://example.com",
-	"themeUri": "https://example.com/themes/modern-blog",
-	"tags": "blog, modern, clean",
-	"status": "draft",
-	"createdAt": "2023-06-01T00:00:00.000Z",
-	"updatedAt": "2023-06-01T00:00:00.000Z"
+ "id": "clj2x0f3g0001qw3h5j7z8j9k",
+ "name": "Modern Blog",
+ "description": "A clean, modern blog theme",
+ "version": "1.0.0",
+ "author": "John Doe",
+ "authorUri": "https://example.com",
+ "themeUri": "https://example.com/themes/modern-blog",
+ "tags": "blog, modern, clean",
+ "status": "draft",
+ "createdAt": "2023-06-01T00:00:00.000Z",
+ "updatedAt": "2023-06-01T00:00:00.000Z"
 }
 ```
 
@@ -366,24 +366,24 @@ Get a list of templates for the authenticated user.
 
 ```json
 {
-	"templates": [
-		{
-			"id": "clj2x0f3g0002qw3h5j7z8j9k",
-			"name": "Blog Home",
-			"description": "Blog homepage template",
-			"type": "page",
-			"status": "published",
-			"themeId": "clj2x0f3g0001qw3h5j7z8j9k",
-			"createdAt": "2023-06-01T00:00:00.000Z",
-			"updatedAt": "2023-06-01T00:00:00.000Z"
-		}
-	],
-	"pagination": {
-		"total": 5,
-		"page": 1,
-		"limit": 10,
-		"pages": 1
-	}
+ "templates": [
+  {
+   "id": "clj2x0f3g0002qw3h5j7z8j9k",
+   "name": "Blog Home",
+   "description": "Blog homepage template",
+   "type": "page",
+   "status": "published",
+   "themeId": "clj2x0f3g0001qw3h5j7z8j9k",
+   "createdAt": "2023-06-01T00:00:00.000Z",
+   "updatedAt": "2023-06-01T00:00:00.000Z"
+  }
+ ],
+ "pagination": {
+  "total": 5,
+  "page": 1,
+  "limit": 10,
+  "pages": 1
+ }
 }
 ```
 
@@ -397,18 +397,18 @@ Get a list of WordPress sites for the authenticated user.
 
 ```json
 {
-	"sites": [
-		{
-			"id": "clj2x0f3g0003qw3h5j7z8j9k",
-			"name": "My Blog",
-			"url": "https://myblog.com",
-			"apiUrl": "https://myblog.com/wp-json",
-			"status": "active",
-			"lastChecked": "2023-06-01T00:00:00.000Z",
-			"createdAt": "2023-06-01T00:00:00.000Z",
-			"updatedAt": "2023-06-01T00:00:00.000Z"
-		}
-	]
+ "sites": [
+  {
+   "id": "clj2x0f3g0003qw3h5j7z8j9k",
+   "name": "My Blog",
+   "url": "https://myblog.com",
+   "apiUrl": "https://myblog.com/wp-json",
+   "status": "active",
+   "lastChecked": "2023-06-01T00:00:00.000Z",
+   "createdAt": "2023-06-01T00:00:00.000Z",
+   "updatedAt": "2023-06-01T00:00:00.000Z"
+  }
+ ]
 }
 ```
 
@@ -422,9 +422,9 @@ Create a new deployment.
 
 ```json
 {
-	"wordpressSiteId": "clj2x0f3g0003qw3h5j7z8j9k",
-	"type": "theme",
-	"themeId": "clj2x0f3g0001qw3h5j7z8j9k"
+ "wordpressSiteId": "clj2x0f3g0003qw3h5j7z8j9k",
+ "type": "theme",
+ "themeId": "clj2x0f3g0001qw3h5j7z8j9k"
 }
 ```
 
@@ -432,13 +432,13 @@ Create a new deployment.
 
 ```json
 {
-	"id": "clj2x0f3g0004qw3h5j7z8j9k",
-	"status": "pending",
-	"type": "theme",
-	"wordpressSiteId": "clj2x0f3g0003qw3h5j7z8j9k",
-	"themeId": "clj2x0f3g0001qw3h5j7z8j9k",
-	"createdAt": "2023-06-01T00:00:00.000Z",
-	"updatedAt": "2023-06-01T00:00:00.000Z"
+ "id": "clj2x0f3g0004qw3h5j7z8j9k",
+ "status": "pending",
+ "type": "theme",
+ "wordpressSiteId": "clj2x0f3g0003qw3h5j7z8j9k",
+ "themeId": "clj2x0f3g0001qw3h5j7z8j9k",
+ "createdAt": "2023-06-01T00:00:00.000Z",
+ "updatedAt": "2023-06-01T00:00:00.000Z"
 }
 ```
 

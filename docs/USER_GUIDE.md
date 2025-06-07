@@ -73,7 +73,7 @@ After logging in, you'll be taken to the dashboard, which provides an overview o
 2. Click the "Add New Site" button
 3. Enter the following information:
    - **Site Name**: A name to identify the site (e.g., "Company Blog")
-   - **Site URL**: The URL of the WordPress site (e.g., "https://example.com")
+   - **Site URL**: The URL of the WordPress site (e.g., "<https://example.com>")
    - **Username**: A WordPress administrator username
    - **Password**: The password for the WordPress administrator account
 4. Click the "Test Connection" button to verify the connection
