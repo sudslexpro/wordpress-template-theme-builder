@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/db';
 import { ArrowLeft, ExternalLink, RefreshCw } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -24,7 +24,7 @@ export default async function DeploymentDetailPage({
     return notFound();
   }
 
-  const deployment = await db.deployment.findUnique({
+  const deployment = await prisma.deployment.findUnique({
     where: {
       id: params.id,
       userId: session.user.id,
@@ -41,7 +41,7 @@ export default async function DeploymentDetailPage({
   }
 
   // Get deployment logs
-  const logs = await db.deploymentLog.findMany({
+  const logs = await prisma.deploymentLog.findMany({
     where: {
       deploymentId: deployment.id,
     },
@@ -51,7 +51,7 @@ export default async function DeploymentDetailPage({
   });
 
   // Get deployment files
-  const files = await db.deploymentFile.findMany({
+  const files = await prisma.deploymentFile.findMany({
     where: {
       deploymentId: deployment.id,
     },

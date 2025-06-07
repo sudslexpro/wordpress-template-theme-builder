@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/db';
 import { ArrowLeft } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,7 @@ export default async function NewDeploymentPage() {
   }
 
   // Get all WordPress sites for the user
-  const wordPressSites = await db.wordPressSite.findMany({
+  const wordPressSites = await prisma.wordPressSite.findMany({
     where: {
       userId: session.user.id,
     },
@@ -27,7 +27,7 @@ export default async function NewDeploymentPage() {
   });
 
   // Get all themes for the user
-  const themes = await db.theme.findMany({
+  const themes = await prisma.theme.findMany({
     where: {
       userId: session.user.id,
     },
@@ -37,7 +37,7 @@ export default async function NewDeploymentPage() {
   });
 
   // Get all templates for the user
-  const templates = await db.template.findMany({
+  const templates = await prisma.template.findMany({
     where: {
       userId: session.user.id,
     },
