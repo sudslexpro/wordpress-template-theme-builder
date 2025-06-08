@@ -1,0 +1,151 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String          @unique
+  password       String
+  image          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  themes         Theme[]         @relation("UserThemes")
+  templates      Template[]      @relation("UserTemplates")
+  wordPressSites WordPressSite[] @relation("UserWordPressSites")
+  deployments    Deployment[]    @relation("UserDeployments")
+}
+
+model Theme {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  thumbnail   String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  status      String       @default("draft") // draft, published
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userId      String       @db.ObjectId
+  user        User         @relation("UserThemes", fields: [userId], references: [id])
+  templates   Template[]   @relation("ThemeTemplates")
+  components  Component[]  @relation("ThemeComponents")
+  deployments Deployment[] @relation("ThemeDeployments")
+}
+
+model Template {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  type        String       // page, post, archive, single, etc.
+  customType  String?      // For custom template types
+  hasInitialContent Boolean @default(false)
+  htmlContent String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  status      String       @default("draft") // draft, published
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  userId      String       @db.ObjectId
+  user        User         @relation("UserTemplates", fields: [userId], references: [id])
+  themeId     String?      @db.ObjectId
+  theme       Theme?       @relation("ThemeTemplates", fields: [themeId], references: [id])
+  components  Component[]  @relation("TemplateComponents")
+  deployments Deployment[] @relation("TemplateDeployments")
+}
+
+model Component {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  type        String    // header, footer, sidebar, etc.
+  selector    String?   // CSS selector for the component
+  htmlContent String?
+  cssStyles   String?
+  jsScripts   String?
+  phpCode     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  themeId     String?   @db.ObjectId
+  theme       Theme?    @relation("ThemeComponents", fields: [themeId], references: [id])
+  templateId  String?   @db.ObjectId
+  template    Template? @relation("TemplateComponents", fields: [templateId], references: [id])
+}
+
+model WordPressSite {
+  id                    String       @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  url                  String
+  apiUrl               String?
+  username             String?
+  password             String?      // Encrypted application password
+  status               String       @default("connected") // connected, disconnected, error
+  lastSync             DateTime?
+  autoSync             Boolean      @default(false)
+  syncInterval         Int          @default(60) // in minutes
+  notifyOnDeployment   Boolean      @default(true)
+  notifyOnFailure      Boolean      @default(true)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  userId               String       @db.ObjectId
+  user                 User         @relation("UserWordPressSites", fields: [userId], references: [id])
+  deployments          Deployment[] @relation("SiteDeployments")
+}
+
+model Deployment {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  status          String           @default("pending") // pending, in_progress, success, failed
+  completedAt     DateTime?
+  includeComponents Boolean         @default(true)
+  includeAssets   Boolean          @default(true)
+  activateAfterDeployment Boolean  @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  userId          String           @db.ObjectId
+  user            User             @relation("UserDeployments", fields: [userId], references: [id])
+  wordPressSiteId String           @db.ObjectId
+  wordPressSite   WordPressSite    @relation("SiteDeployments", fields: [wordPressSiteId], references: [id])
+  themeId         String?          @db.ObjectId
+  theme           Theme?           @relation("ThemeDeployments", fields: [themeId], references: [id])
+  templateId      String?          @db.ObjectId
+  template        Template?        @relation("TemplateDeployments", fields: [templateId], references: [id])
+  logs            DeploymentLog[]  @relation("DeploymentLogs")
+  files           DeploymentFile[] @relation("DeploymentFiles")
+}
+
+model DeploymentLog {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  level       String    // info, warning, error, success
+  message     String
+  metadata    Json?     // Additional structured data
+  timestamp   DateTime  @default(now())
+  deploymentId String    @db.ObjectId
+  deployment  Deployment @relation("DeploymentLogs", fields: [deploymentId], references: [id], onDelete: Cascade)
+}
+
+model DeploymentFile {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  path        String    // File path relative to the WordPress installation
+  type        String    // php, css, js, etc.
+  content     String    // File content
+  size        Int       // File size in bytes
+  hash        String?   // Content hash for change detection
+  createdAt   DateTime  @default(now())
+  deploymentId String    @db.ObjectId
+  deployment  Deployment @relation("DeploymentFiles", fields: [deploymentId], references: [id], onDelete: Cascade)
+}
